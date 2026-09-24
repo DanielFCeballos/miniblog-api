@@ -62,7 +62,7 @@ Para ejecutar el proyecto localmente se necesita:
 Clonar el repositorio:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/DanielFCeballos/miniblog-api.git
 ```
 
 Entrar en la carpeta:
@@ -280,19 +280,24 @@ npx @redocly/cli lint docs/openapi.yaml
 
 La especificación documenta los endpoints de Authors y Posts, sus parámetros, cuerpos de petición, respuestas y schemas.
 
+````markdown
 ## Deploy
 
-El proyecto será desplegado en Railway.
+El proyecto está desplegado en Railway.
 
 URL de producción:
 
+https://miniblog-api-production-6d45.up.railway.app
+
+### Endpoints públicos de prueba
+
 ```text
-PENDIENTE_DE_COMPLETAR_DESPUES_DEL_DEPLOY
+GET https://miniblog-api-production-6d45.up.railway.app/
+GET https://miniblog-api-production-6d45.up.railway.app/authors
+GET https://miniblog-api-production-6d45.up.railway.app/posts
 ```
 
-Una vez realizado el deploy, esta sección será actualizada con la URL pública de la API.
-
-## Evidencias
+## Evidencias 
 
 Durante el desarrollo se recopilaron evidencias de:
 

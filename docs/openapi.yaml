@@ -13,10 +13,10 @@ info:
 security: []
 
 servers:
-  - url: https://miniblog-api-production.up.railway.app
-    description: Servidor de producción
-  - url: http://localhost:3000
-    description: Servidor local
+   - url: https://miniblog-api-production-6d45.up.railway.app
+     description: Servidor de producción
+   - url: http://localhost:3000
+     description: Servidor local
 
 tags:
   - name: Authors
