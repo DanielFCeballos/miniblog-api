@@ -265,7 +265,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Post"
+                  $ref: "#/components/schemas/PostWithAuthor"
         "400":
           description: ID de autor inválido
         "500":
@@ -333,6 +333,14 @@ components:
         created_at:
           type: string
           format: date-time
+
+    PostWithAuthor:
+      allOf:
+        - $ref: "#/components/schemas/Post"
+        - type: object
+          properties:
+            author:
+              $ref: "#/components/schemas/Author"
 
     PostInput:
       type: object

@@ -40,6 +40,7 @@ after(async () => {
   await pool.end();
 });
 
+
 test("GET /authors devuelve status 200 y un array", async () => {
   const response = await request(app)
     .get("/authors");
@@ -103,12 +104,26 @@ test("POST /posts crea un post relacionado con el autor", async () => {
       content: "Contenido generado durante las pruebas automatizadas.",
       published: true
     });
-
   assert.equal(response.status, 201);
   assert.equal(response.body.author_id, testAuthorId);
   assert.equal(response.body.title, "Post creado por testing");
 
   testPostId = response.body.id;
+});
+
+test("GET /posts/author/:authorId devuelve posts con detalle del autor", async () => {
+  const response = await request(app)
+    .get(`/posts/author/${testAuthorId}`);
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(response.body));
+  assert.ok(response.body.length > 0);
+
+  assert.equal(response.body[0].author_id, testAuthorId);
+
+  assert.ok(response.body[0].author);
+  assert.equal(response.body[0].author.id, testAuthorId);
+  assert.equal(response.body[0].author.email, testEmail);
 });
 
 test("POST /posts rechaza un author_id inexistente", async () => {

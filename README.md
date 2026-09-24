@@ -280,14 +280,34 @@ npx @redocly/cli lint docs/openapi.yaml
 
 La especificación documenta los endpoints de Authors y Posts, sus parámetros, cuerpos de petición, respuestas y schemas.
 
-````markdown
+
 ## Deploy
 
 El proyecto está desplegado en Railway.
 
-URL de producción:
+### Configuración en Railway
 
+Para realizar el despliegue se utilizó:
+
+- Un servicio PostgreSQL en Railway.
+- Un servicio `miniblog-api` conectado al repositorio de GitHub.
+- La variable de entorno `DATABASE_URL`, configurada mediante la referencia `${{Postgres.DATABASE_URL}}`.
+- El comando de inicio `npm start`.
+- Las tablas y datos iniciales se cargaron utilizando `sql/setup.sql` y `sql/seed.sql`.
+
+### URLs del servicio
+
+URL interna de Railway:
+
+```text
+miniblog-api.railway.internal
+```
+
+URL pública de producción:
+
+```text
 https://miniblog-api-production-6d45.up.railway.app
+```
 
 ### Endpoints públicos de prueba
 
@@ -296,6 +316,7 @@ GET https://miniblog-api-production-6d45.up.railway.app/
 GET https://miniblog-api-production-6d45.up.railway.app/authors
 GET https://miniblog-api-production-6d45.up.railway.app/posts
 ```
+
 
 ## Evidencias 
 

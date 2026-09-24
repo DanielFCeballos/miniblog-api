@@ -23,14 +23,38 @@ async function getPostById(id) {
 
 async function getPostsByAuthorId(authorId) {
   const result = await pool.query(
-    `SELECT id, author_id, title, content, published, created_at
-     FROM posts
-     WHERE author_id = $1
-     ORDER BY id`,
+    `SELECT
+       p.id,
+       p.author_id,
+       p.title,
+       p.content,
+       p.published,
+       p.created_at,
+       a.id AS author_id_detail,
+       a.name AS author_name,
+       a.email AS author_email,
+       a.bio AS author_bio
+     FROM posts p
+     JOIN authors a ON p.author_id = a.id
+     WHERE p.author_id = $1
+     ORDER BY p.id`,
     [authorId]
   );
 
-  return result.rows;
+  return result.rows.map((row) => ({
+    id: row.id,
+    author_id: row.author_id,
+    title: row.title,
+    content: row.content,
+    published: row.published,
+    created_at: row.created_at,
+    author: {
+      id: row.author_id_detail,
+      name: row.author_name,
+      email: row.author_email,
+      bio: row.author_bio
+    }
+  }));
 }
 
 async function createPost({ authorId, title, content, published }) {
