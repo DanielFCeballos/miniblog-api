@@ -1,0 +1,356 @@
+openapi: 3.0.3
+
+info:
+  title: MiniBlog API
+  version: 1.0.0
+  description: >
+    REST API para gestionar autores y publicaciones de un MiniBlog.
+    Desarrollada con Node.js, Express y PostgreSQL.
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
+
+security: []
+
+servers:
+  - url: https://miniblog-api-production.up.railway.app
+    description: Servidor de producción
+  - url: http://localhost:3000
+    description: Servidor local
+
+tags:
+  - name: Authors
+    description: Operaciones relacionadas con autores
+  - name: Posts
+    description: Operaciones relacionadas con publicaciones
+
+paths:
+  /authors:
+    get:
+      operationId: getAuthors
+      tags:
+        - Authors
+      summary: Obtener todos los autores
+      responses:
+        "200":
+          description: Lista de autores obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Author"
+        "500":
+          description: Error interno del servidor
+
+    post:
+      operationId: createAuthor
+      tags:
+        - Authors
+      summary: Crear un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "201":
+          description: Autor creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: Datos inválidos o email duplicado
+        "500":
+          description: Error interno del servidor
+
+  /authors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID del autor
+        schema:
+          type: integer
+
+    get:
+      operationId: getAuthorById
+      tags:
+        - Authors
+      summary: Obtener un autor por ID
+      responses:
+        "200":
+          description: Autor encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+        "500":
+          description: Error interno del servidor
+
+    put:
+      operationId: updateAuthor
+      tags:
+        - Authors
+      summary: Actualizar un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "200":
+          description: Autor actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: Datos inválidos o email duplicado
+        "404":
+          description: Autor no encontrado
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      operationId: deleteAuthor
+      tags:
+        - Authors
+      summary: Eliminar un autor
+      responses:
+        "204":
+          description: Autor eliminado correctamente
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+        "500":
+          description: Error interno del servidor
+
+  /posts:
+    get:
+      operationId: getPosts
+      tags:
+        - Posts
+      summary: Obtener todos los posts
+      responses:
+        "200":
+          description: Lista de posts obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "500":
+          description: Error interno del servidor
+
+    post:
+      operationId: createPost
+      tags:
+        - Posts
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "201":
+          description: Post creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Datos inválidos o autor inexistente
+        "500":
+          description: Error interno del servidor
+
+  /posts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID del post
+        schema:
+          type: integer
+
+    get:
+      operationId: getPostById
+      tags:
+        - Posts
+      summary: Obtener un post por ID
+      responses:
+        "200":
+          description: Post encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: ID inválido
+        "404":
+          description: Post no encontrado
+        "500":
+          description: Error interno del servidor
+
+    put:
+      operationId: updatePost
+      tags:
+        - Posts
+      summary: Actualizar un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "200":
+          description: Post actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Datos inválidos o autor inexistente
+        "404":
+          description: Post no encontrado
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      operationId: deletePost
+      tags:
+        - Posts
+      summary: Eliminar un post
+      responses:
+        "204":
+          description: Post eliminado correctamente
+        "400":
+          description: ID inválido
+        "404":
+          description: Post no encontrado
+        "500":
+          description: Error interno del servidor
+
+  /posts/author/{authorId}:
+    parameters:
+      - name: authorId
+        in: path
+        required: true
+        description: ID del autor
+        schema:
+          type: integer
+
+    get:
+      operationId: getPostsByAuthorId
+      tags:
+        - Posts
+      summary: Obtener posts por autor
+      responses:
+        "200":
+          description: Lista de posts del autor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: ID de autor inválido
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ana Torres
+        email:
+          type: string
+          format: email
+          example: ana.torres@example.com
+        bio:
+          type: string
+          nullable: true
+          example: Desarrolladora backend y autora de tecnología.
+        created_at:
+          type: string
+          format: date-time
+
+    AuthorInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: Pedro Ruiz
+        email:
+          type: string
+          format: email
+          example: pedro.ruiz@example.com
+        bio:
+          type: string
+          nullable: true
+          example: Autor del MiniBlog
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        author_id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Introducción a Node.js
+        content:
+          type: string
+          example: Node.js permite ejecutar JavaScript del lado del servidor.
+        published:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+
+    PostInput:
+      type: object
+      required:
+        - author_id
+        - title
+        - content
+      properties:
+        author_id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Mi nuevo post
+        content:
+          type: string
+          example: Contenido de la publicación.
+        published:
+          type: boolean
+          default: false
+          example: true
