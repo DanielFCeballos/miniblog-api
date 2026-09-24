@@ -148,3 +148,32 @@ test("GET /posts/:id devuelve el post creado", async () => {
   assert.equal(response.body.id, testPostId);
   assert.equal(response.body.author_id, testAuthorId);
 });
+
+test("PUT /posts/:id actualiza un post", async () => {
+  const response = await request(app)
+    .put(`/posts/${testPostId}`)
+    .send({
+      author_id: testAuthorId,
+      title: "Post actualizado por testing",
+      content: "Contenido actualizado durante las pruebas automatizadas.",
+      published: false
+    });
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.id, testPostId);
+  assert.equal(response.body.title, "Post actualizado por testing");
+  assert.equal(response.body.published, false);
+});
+
+test("DELETE /posts/:id elimina un post", async () => {
+  const response = await request(app)
+    .delete(`/posts/${testPostId}`);
+
+  assert.equal(response.status, 204);
+
+  const getResponse = await request(app)
+    .get(`/posts/${testPostId}`);
+
+  assert.equal(getResponse.status, 404);
+  assert.equal(getResponse.body.error, "post not found");
+});
